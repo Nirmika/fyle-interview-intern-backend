@@ -13,7 +13,6 @@ def test_get_assignments(client, h_principal):
     for assignment in data:
         assert assignment['state'] in [AssignmentStateEnum.SUBMITTED, AssignmentStateEnum.GRADED]
 
-
 def test_grade_assignment_draft_assignment(client, h_principal):
     """
     failure case: If an assignment is in Draft state, it cannot be graded by principal
@@ -21,13 +20,14 @@ def test_grade_assignment_draft_assignment(client, h_principal):
     response = client.post(
         '/principal/assignments/grade',
         json={
-            'id': 5,
+            'id': 5,  # Ensure this assignment is in 'DRAFT' state
             'grade': GradeEnum.A.value
         },
         headers=h_principal
     )
 
     assert response.status_code == 400
+    data = response.json
 
 
 def test_grade_assignment(client, h_principal):
